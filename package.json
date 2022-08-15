@@ -1,0 +1,26 @@
+{
+  "name": "best-bitcube-noms-server",
+  "version": "0.0.1",
+  "description": "Server ",  
+  "scripts": {
+    "start": "ts-node lib/index.ts",
+    "build": "tsc",
+    "test": "nyc mocha --require ts-node/register test/**/*.ts"
+  }, 
+  "dependencies": {
+    "joi": "^17.4.0",
+    "socket.io": "^4.0.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/mocha": "^8.2.3",
+    "@types/chai": "^4.2.16",
+    "@types/uuid": "^8.3.0",
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2",
+    "nyc": "^15.1.0",
+    "socket.io-client": "^4.0.1",
+    "ts-node": "10.7.0",
+    "typescript": "4.5.4"
+  }
+}
