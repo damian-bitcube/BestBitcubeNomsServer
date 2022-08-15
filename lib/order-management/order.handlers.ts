@@ -2,7 +2,7 @@ import { Errors, mapErrorDetails, sanitizeErrorMessage } from "../util";
 import { v4 as uuid } from "uuid";
 import { Components } from "../app";
 import Joi from "joi";
-import { OrderItem, OrderItemId } from "./order.repository";
+import { OrderItem, NumberPlate } from "./order.repository";
 import { ClientEvents, Response, ServerEvents } from "../events";
 import { Socket } from "socket.io";
 
@@ -16,6 +16,8 @@ const orderItemSchema = Joi.object({
     update: (schema) => schema.required(),
   }),
   title: Joi.string().max(256).required(),
+  qty: Joi.number().max(25).required(),
+  size: Joi.string(),
   completed: Joi.boolean().required(),
 });
 
@@ -24,7 +26,7 @@ export default function (components: Components) {
   return {
     createOrder: async function (
       payload: Omit<OrderItem, "id">,
-      callback: (res: Response<OrderItemId>) => void
+      callback: (res: Response<NumberPlate>) => void
     ) {
       // @ts-ignore
       const socket: Socket<ClientEvents, ServerEvents> = this;
@@ -63,7 +65,7 @@ export default function (components: Components) {
     },
 
     readOrder: async function (
-      id: OrderItemId,
+      id: NumberPlate,
       callback: (res: Response<OrderItem>) => void
     ) {
       const { error } = idSchema.validate(id);
@@ -118,7 +120,7 @@ export default function (components: Components) {
     },
 
     deleteOrder: async function (
-      id: OrderItemId,
+      id: NumberPlate,
       callback: (res?: Response<void>) => void
     ) {
       // @ts-ignore

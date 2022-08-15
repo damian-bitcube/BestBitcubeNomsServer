@@ -1,5 +1,5 @@
 import { ValidationErrorItem } from "joi";
-import { OrderItem, OrderItemId } from "./order-management/order.repository";
+import { OrderItem, NumberPlate } from "./order-management/order.repository";
 
 interface Error {
   error: string;
@@ -15,7 +15,7 @@ export type Response<T> = Error | Success<T>;
 export interface ServerEvents {
   "order:created": (order: OrderItem) => void;
   "order:updated": (order: OrderItem) => void;
-  "order:deleted": (id: OrderItemId) => void;
+  "order:deleted": (id: NumberPlate) => void;
 }
 
 export interface ClientEvents {
@@ -23,15 +23,15 @@ export interface ClientEvents {
 
   "order:create": (
     payload: Omit<OrderItem, "id">,
-    callback: (res: Response<OrderItemId>) => void
+    callback: (res: Response<NumberPlate>) => void
   ) => void;
 
-  "order:read": (id: OrderItemId, callback: (res: Response<OrderItem>) => void) => void;
+  "order:read": (id: NumberPlate, callback: (res: Response<OrderItem>) => void) => void;
 
   "order:update": (
     payload: OrderItem,
     callback: (res?: Response<void>) => void
   ) => void;
 
-  "order:delete": (id: OrderItemId, callback: (res?: Response<void>) => void) => void;
+  "order:delete": (id: NumberPlate, callback: (res?: Response<void>) => void) => void;
 }

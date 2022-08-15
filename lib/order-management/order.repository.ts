@@ -7,27 +7,29 @@ abstract class CrudRepository<T, ID> {
   abstract deleteById(id: ID): Promise<void>;
 }
 
-export type OrderItemId = string;
+export type NumberPlate = string;
 
 export interface OrderItem {
-  id: OrderItemId;
-  completed: boolean;
+  id: NumberPlate;
   title: string;
+  size?: string;
+  completed: boolean;
+  qty: number;
 }
 
-export abstract class OrderRepository extends CrudRepository<OrderItem, OrderItemId> {}
+export abstract class OrderRepository extends CrudRepository<OrderItem, NumberPlate> {}
 
 export class InMemoryOrderRepository extends OrderRepository {
-  private readonly orderItems: Map<OrderItemId, OrderItem> = new Map();
+  private readonly orderItems: Map<NumberPlate, OrderItem> = new Map();
 
   findAll(): Promise<OrderItem[]> {
-    this.orderItems.set('1', {id:'1', completed:true, title:'this is a test'} as OrderItem);
+    this.orderItems.set('FLD177FS', {id:'FLD177FS', completed:true, qty:1, size:'medium',title:'cheese burger'} as OrderItem);
 
     const entities = Array.from(this.orderItems.values());
     return Promise.resolve(entities);
   }
 
-  findById(id: OrderItemId): Promise<OrderItem> {
+  findById(id: NumberPlate): Promise<OrderItem> {
     if (this.orderItems.has(id)) {
       return Promise.resolve(this.orderItems.get(id)!);
     } else {
@@ -40,7 +42,7 @@ export class InMemoryOrderRepository extends OrderRepository {
     return Promise.resolve();
   }
 
-  deleteById(id: OrderItemId): Promise<void> {
+  deleteById(id: NumberPlate): Promise<void> {
     const deleted = this.orderItems.delete(id);
     if (deleted) {
       return Promise.resolve();
