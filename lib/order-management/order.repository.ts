@@ -94,7 +94,8 @@ export class InMemoryOrderRepository extends OrderRepository {
     }
   }
 }
-  export class InMemoryOrderItemRepository extends OrderItemRepository {
+
+export class InMemoryOrderItemRepository extends OrderItemRepository {
   private readonly orderItems: Map<string, OrderItem> = new Map();
 
   findAll(): Promise<OrderItem[]> {

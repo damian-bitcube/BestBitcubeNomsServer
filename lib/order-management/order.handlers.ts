@@ -31,21 +31,6 @@ export default function (components: Components) {
       // @ts-ignore
       const socket: Socket<ClientEvents, ServerEvents> = this;
 
-      // validate the payload
-      // const { error, value } = orderItemSchema.tailor("create").validate(payload, {
-      //   abortEarly: false,
-      //   stripUnknown: true,
-      // });
-
-      // if (error) {
-      //   return callback({
-      //     error: Errors.INVALID_PAYLOAD,
-      //     errorDetails: mapErrorDetails(error.details),
-      //   });
-      // }
-
-      // value.id = uuid();
-
       // persist the entity
       try {
         await orderRepository.save(payload);
@@ -62,7 +47,61 @@ export default function (components: Components) {
 
       // notify the other users
       socket.broadcast.emit("order:started", payload);
+    }, 
+     createOrder: async function (
+      payload: Order,
+      callback: (res: Response<NumberPlate>) => void
+    ) {
+      // @ts-ignore
+      const socket: Socket<ClientEvents, ServerEvents> = this;
+
+      // persist the entity
+      try {
+        await orderRepository.save(payload);
+      } catch (e) {
+        return callback({
+          error: sanitizeErrorMessage(e),
+        });
+      }
+
+      // acknowledge the creation
+      callback({
+        data: payload.id,
+      });
+
+      // notify the other users
+      socket.broadcast.emit("order:created", payload);
     },
+    listOrders: async function (callback: (res: Response<Order[]>) => void) {
+      try {
+        callback({
+          data: await orderRepository.findAll(),
+        });
+      } catch (e) {
+        callback({
+          error: sanitizeErrorMessage(e),
+        });
+      }
+    },
+    deleteOrder: async function (
+      id: NumberPlate,
+      callback: (res?: Response<void>) => void
+    ) {
+      // @ts-ignore
+      const socket: Socket<ClientEvents, ServerEvents> = this;
+
+      try {
+        await orderRepository.deleteById(id);
+      } catch (e) {
+        return callback({
+          error: sanitizeErrorMessage(e),
+        });
+      }
+
+      callback();
+      socket.broadcast.emit("order:deleted", id);
+    },
+
 
     createOrderItem: async function (
       payload: Omit<OrderItem, "id">,
