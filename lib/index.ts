@@ -1,12 +1,13 @@
 import { createServer } from "http";
 import { createApplication } from "./app";
-import { InMemoryOrderRepository } from "./order-management/order.repository";
+import { InMemoryOrderItemRepository, InMemoryOrderRepository } from "./order-management/order.repository";
 
 const httpServer = createServer();
 
 createApplication(
   httpServer,
   {
+    orderItemRepository: new InMemoryOrderItemRepository(),
     orderRepository: new InMemoryOrderRepository(),
   },
   {

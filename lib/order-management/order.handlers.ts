@@ -1,10 +1,10 @@
 import { Errors, mapErrorDetails, sanitizeErrorMessage } from "../util";
 import { v4 as uuid } from "uuid";
-import { Components } from "../app";
 import Joi from "joi";
 import { OrderItem, NumberPlate } from "./order.repository";
 import { ClientEvents, Response, ServerEvents } from "../events";
 import { Socket } from "socket.io";
+import { Components } from "../components";
 
 const idSchema = Joi.string().guid({
   version: "uuidv4",
@@ -22,9 +22,9 @@ const orderItemSchema = Joi.object({
 });
 
 export default function (components: Components) {
-  const { orderRepository: orderRepository } = components;
+  const { orderItemRepository: orderItemRepository, orderRepository:vehicleOrderRepository  } = components;
   return {
-    createOrder: async function (
+    createOrderItem: async function (
       payload: Omit<OrderItem, "id">,
       callback: (res: Response<NumberPlate>) => void
     ) {
@@ -48,7 +48,7 @@ export default function (components: Components) {
 
       // persist the entity
       try {
-        await orderRepository.save(value);
+        await orderItemRepository.save(value);
       } catch (e) {
         return callback({
           error: sanitizeErrorMessage(e),
@@ -61,10 +61,10 @@ export default function (components: Components) {
       });
 
       // notify the other users
-      socket.broadcast.emit("order:created", value);
+      socket.broadcast.emit("order:item:created", value);
     },
 
-    readOrder: async function (
+    readOrderItem: async function (
       id: NumberPlate,
       callback: (res: Response<OrderItem>) => void
     ) {
@@ -77,7 +77,7 @@ export default function (components: Components) {
       }
 
       try {
-        const order = await orderRepository.findById(id);
+        const order = await orderItemRepository.findById(id);
         callback({
           data: order,
         });
@@ -88,7 +88,7 @@ export default function (components: Components) {
       }
     },
 
-    updateOrder: async function (
+    updateOrderItem: async function (
       payload: OrderItem,
       callback: (res?: Response<void>) => void
     ) {
@@ -108,7 +108,7 @@ export default function (components: Components) {
       }
 
       try {
-        await orderRepository.save(value);
+        await orderItemRepository.save(value);
       } catch (e) {
         return callback({
           error: sanitizeErrorMessage(e),
@@ -116,10 +116,10 @@ export default function (components: Components) {
       }
 
       callback();
-      socket.broadcast.emit("order:updated", value);
+      socket.broadcast.emit("order:item:updated", value);
     },
 
-    deleteOrder: async function (
+    deleteOrderItem: async function (
       id: NumberPlate,
       callback: (res?: Response<void>) => void
     ) {
@@ -135,7 +135,7 @@ export default function (components: Components) {
       }
 
       try {
-        await orderRepository.deleteById(id);
+        await orderItemRepository.deleteById(id);
       } catch (e) {
         return callback({
           error: sanitizeErrorMessage(e),
@@ -143,13 +143,13 @@ export default function (components: Components) {
       }
 
       callback();
-      socket.broadcast.emit("order:deleted", id);
+      socket.broadcast.emit("order:item:deleted", id);
     },
 
-    listOrder: async function (callback: (res: Response<OrderItem[]>) => void) {
+    listOrderItem: async function (callback: (res: Response<OrderItem[]>) => void) {
       try {
         callback({
-          data: await orderRepository.findAll(),
+          data: await orderItemRepository.findAll(),
         });
       } catch (e) {
         callback({

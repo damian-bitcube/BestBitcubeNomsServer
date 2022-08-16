@@ -1,12 +1,8 @@
 import { Server as HttpServer } from "http";
 import { Server, ServerOptions } from "socket.io";
 import { ClientEvents, ServerEvents } from "./events";
-import { OrderRepository } from "./order-management/order.repository";
 import createOrderHandlers from "./order-management/order.handlers";
-
-export interface Components {
-  orderRepository: OrderRepository;
-}
+import { Components } from "./components";
 
 export function createApplication(
   httpServer: HttpServer,
@@ -16,20 +12,23 @@ export function createApplication(
   const io = new Server<ClientEvents, ServerEvents>(httpServer, serverOptions);
 
   const {
-    createOrder: createOrder,
-    readOrder: readOrder,
-    updateOrder: updateOrder,
-    deleteOrder: deleteOrder,
-    listOrder: listOrder,
+    createOrderItem: createOrderItem,
+    readOrderItem: readOrderItem,
+    updateOrderItem: updateOrderItem,
+    deleteOrderItem: deleteOrderItem,
+    listOrderItem: listOrderItem,
   } = createOrderHandlers(components);
 
   io.on("connection", (socket) => {
-    socket.on("order:create", createOrder);
-    socket.on("order:read", readOrder);
-    socket.on("order:update", updateOrder);
-    socket.on("order:delete", deleteOrder);
-    socket.on("order:list", listOrder);
+    socket.on("order:item:create", createOrderItem);
+    socket.on("order:item:read", readOrderItem);
+    socket.on("order:item:update", updateOrderItem);
+    socket.on("order:item:delete", deleteOrderItem);
+    socket.on("order:item:list", listOrderItem);
   });
 
   return io;
 }
+/*
+
+*/
