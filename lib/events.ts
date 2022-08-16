@@ -13,6 +13,7 @@ interface Success<T> {
 export type Response<T> = Error | Success<T>;
 
 export interface ServerEvents {
+  "photo:taken": () => void;
   "order:started": (order: Order) => void;
   "order:created": (order: Order) => void;
   "order:deleted": (id: string) => void;
@@ -22,6 +23,10 @@ export interface ServerEvents {
 }
 
 export interface ClientEvents {
+  "photo:take": (
+    payload: void,
+    callback: (res: Response<void>) => void
+  ) => void;
   "order:start": (
     payload: Order,
     callback: (res: Response<NumberPlate>) => void

@@ -24,6 +24,27 @@ const orderItemSchema = Joi.object({
 export default function (components: Components) {
   const { orderItemRepository: orderItemRepository, orderRepository:orderRepository  } = components;
   return {
+    takePhoto: async function (
+      payload: void
+    ) {
+      // @ts-ignore
+      const socket: Socket<ClientEvents, ServerEvents> = this;
+
+      // persist the entity
+      // try {
+      //   await orderRepository.save(payload);
+      // } catch (e) {
+      //   return callback({
+      //     error: sanitizeErrorMessage(e),
+      //   });
+      // }
+
+      // acknowledge the creation
+      // callback(void);
+
+      // notify the other users
+      socket.broadcast.emit("photo:taken");
+    }, 
     startOrder: async function (
       payload: Order,
       callback: (res: Response<NumberPlate>) => void
