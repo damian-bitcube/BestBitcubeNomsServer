@@ -21,29 +21,24 @@ export interface ServerEvents {
 }
 
 export interface ClientEvents {
-  "order:create": (
-    payload: Order,
-    callback: (res: Response<NumberPlate>) => void
-  ) => void;
-
   "order:start": (
     payload: Order,
     callback: (res: Response<NumberPlate>) => void
   ) => void;
-
+  "order:create": (
+    payload: Order,
+    callback: (res: Response<NumberPlate>) => void
+  ) => void;
+  
   "order:item:list": (callback: (res: Response<OrderItem[]>) => void) => void;
-
   "order:item:create": (
     payload: Omit<OrderItem, "id">,
     callback: (res: Response<NumberPlate>) => void
   ) => void;
-
   "order:item:read": (id: NumberPlate, callback: (res: Response<OrderItem>) => void) => void;
-
   "order:item:update": (
     payload: OrderItem,
     callback: (res?: Response<void>) => void
   ) => void;
-
   "order:item:delete": (id: NumberPlate, callback: (res?: Response<void>) => void) => void;
 }

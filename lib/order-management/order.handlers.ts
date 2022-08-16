@@ -1,6 +1,6 @@
 import { Errors, mapErrorDetails, sanitizeErrorMessage } from "../util";
 import { v4 as uuid } from "uuid";
-import Joi from "joi";
+import * as Joi from "joi";
 import { OrderItem, NumberPlate, Order } from "./order.repository";
 import { ClientEvents, Response, ServerEvents } from "../events";
 import { Socket } from "socket.io";

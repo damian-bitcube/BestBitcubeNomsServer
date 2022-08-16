@@ -8,7 +8,14 @@ abstract class CrudRepository<T, ID> {
 }
 
 export type NumberPlate = string;
-export interface Vehicle {
+export class Vehicle {
+  constructor(plate?: string, color?: string, make?: string, model?: string, type?: string) {
+    this.plate = plate ?? undefined;
+    this.make = make ?? undefined;
+    this.model = model ?? undefined;
+    this.color = color ?? undefined;
+    this.vehicleType = type ?? undefined;
+  }
   plate?: string;
   make?: string;
   model?: string;
@@ -27,17 +34,25 @@ export class OrderDetail {
   id?: number;
   orderTime: Date;
   completeTime?: Date;
+  status?:  any;
   content?: OrderItem[];
 }
-export interface Order {
+export class Order {
   id: string;
   vehicleDetail: Vehicle;
   orderDetail: OrderDetail;
+  constructor(id:string){
+    this.id = id;
+    this.vehicleDetail = new Vehicle();
+    this.orderDetail = new OrderDetail();
+  }
 }
 export interface OrderItem {
-  id: NumberPlate;
+  id: string;
   title?: string;
   size?: string;
+  itemType?: any;
+  comment?: string;
   completed?: boolean;
   qty?: number;
 }
@@ -80,7 +95,7 @@ export class InMemoryOrderRepository extends OrderRepository {
   }
 }
   export class InMemoryOrderItemRepository extends OrderItemRepository {
-  private readonly orderItems: Map<NumberPlate, OrderItem> = new Map();
+  private readonly orderItems: Map<string, OrderItem> = new Map();
 
   findAll(): Promise<OrderItem[]> {
     this.orderItems.set('FLD177FS', {id:'FLD177FS', completed:true, qty:1, size:'medium',title:'cheese burger'} as OrderItem);
