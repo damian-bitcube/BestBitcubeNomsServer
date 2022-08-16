@@ -13,6 +13,7 @@ interface Success<T> {
 export type Response<T> = Error | Success<T>;
 
 export interface ServerEvents {
+  "order:started": (order: Order) => void;
   "order:created": (order: Order) => void;
   "order:item:created": (order: OrderItem) => void;
   "order:item:updated": (order: OrderItem) => void;
@@ -21,6 +22,11 @@ export interface ServerEvents {
 
 export interface ClientEvents {
   "order:create": (
+    payload: Order,
+    callback: (res: Response<NumberPlate>) => void
+  ) => void;
+
+  "order:start": (
     payload: Order,
     callback: (res: Response<NumberPlate>) => void
   ) => void;

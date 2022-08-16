@@ -1,7 +1,7 @@
 import { Errors, mapErrorDetails, sanitizeErrorMessage } from "../util";
 import { v4 as uuid } from "uuid";
 import Joi from "joi";
-import { OrderItem, NumberPlate } from "./order.repository";
+import { OrderItem, NumberPlate, Order } from "./order.repository";
 import { ClientEvents, Response, ServerEvents } from "../events";
 import { Socket } from "socket.io";
 import { Components } from "../components";
@@ -22,8 +22,48 @@ const orderItemSchema = Joi.object({
 });
 
 export default function (components: Components) {
-  const { orderItemRepository: orderItemRepository, orderRepository:vehicleOrderRepository  } = components;
+  const { orderItemRepository: orderItemRepository, orderRepository:orderRepository  } = components;
   return {
+    startOrder: async function (
+      payload: Order,
+      callback: (res: Response<NumberPlate>) => void
+    ) {
+      // @ts-ignore
+      const socket: Socket<ClientEvents, ServerEvents> = this;
+
+      // validate the payload
+      // const { error, value } = orderItemSchema.tailor("create").validate(payload, {
+      //   abortEarly: false,
+      //   stripUnknown: true,
+      // });
+
+      // if (error) {
+      //   return callback({
+      //     error: Errors.INVALID_PAYLOAD,
+      //     errorDetails: mapErrorDetails(error.details),
+      //   });
+      // }
+
+      // value.id = uuid();
+
+      // persist the entity
+      try {
+        await orderRepository.save(payload);
+      } catch (e) {
+        return callback({
+          error: sanitizeErrorMessage(e),
+        });
+      }
+
+      // acknowledge the creation
+      callback({
+        data: payload.id,
+      });
+
+      // notify the other users
+      socket.broadcast.emit("order:started", payload);
+    },
+
     createOrderItem: async function (
       payload: Omit<OrderItem, "id">,
       callback: (res: Response<NumberPlate>) => void

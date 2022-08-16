@@ -12,6 +12,7 @@ export function createApplication(
   const io = new Server<ClientEvents, ServerEvents>(httpServer, serverOptions);
 
   const {
+    startOrder: startOrder,
     createOrderItem: createOrderItem,
     readOrderItem: readOrderItem,
     updateOrderItem: updateOrderItem,
@@ -20,6 +21,7 @@ export function createApplication(
   } = createOrderHandlers(components);
 
   io.on("connection", (socket) => {
+    socket.on("order:start", startOrder);
     socket.on("order:item:create", createOrderItem);
     socket.on("order:item:read", readOrderItem);
     socket.on("order:item:update", updateOrderItem);
