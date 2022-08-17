@@ -15,6 +15,7 @@ export function createApplication(
     takeOrderPhoto:takeOrderPhoto,
     takePickupPhoto:takePickupPhoto,
     startOrder: startOrder,
+    confirmOrder: confirmOrder,
     createOrderItem: createOrderItem,
     readOrderItem: readOrderItem,
     updateOrderItem: updateOrderItem,
@@ -26,6 +27,7 @@ export function createApplication(
     socket.on("photo:order:take", takeOrderPhoto);
     socket.on("photo:pickup:take", takePickupPhoto);
     socket.on("order:start", startOrder);
+    socket.on("order:confirm", confirmOrder);
     socket.on("order:item:create", createOrderItem);
     socket.on("order:item:read", readOrderItem);
     socket.on("order:item:update", updateOrderItem);

@@ -16,7 +16,7 @@ export interface ServerEvents {
   "photo:order:taken": () => void;
   "photo:pickup:taken": () => void;
   "order:started": (order: Order) => void;
-  "order:created": (order: Order) => void;
+  "order:confirmed": (order: Order) => void;
   "order:deleted": (id: string) => void;
   "order:item:created": (order: OrderItem) => void;
   "order:item:updated": (order: OrderItem) => void;
@@ -36,7 +36,7 @@ export interface ClientEvents {
     payload: Order,
     callback: (res: Response<NumberPlate>) => void
   ) => void;
-  "order:create": (
+  "order:confirm": (
     payload: Order,
     callback: (res: Response<NumberPlate>) => void
   ) => void;

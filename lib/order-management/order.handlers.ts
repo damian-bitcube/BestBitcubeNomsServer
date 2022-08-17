@@ -90,7 +90,7 @@ export default function (components: Components) {
       // notify the other users
       socket.broadcast.emit("order:started", payload);
     }, 
-     createOrder: async function (
+     confirmOrder: async function (
       payload: Order,
       callback: (res: Response<NumberPlate>) => void
     ) {
@@ -112,7 +112,7 @@ export default function (components: Components) {
       });
 
       // notify the other users
-      socket.broadcast.emit("order:created", payload);
+      socket.broadcast.emit("order:confirmed", payload);
     },
     listOrders: async function (callback: (res: Response<Order[]>) => void) {
       try {
