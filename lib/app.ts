@@ -13,7 +13,7 @@ export function createApplication(
 
   const {
     takeOrderPhoto:takeOrderPhoto,
-    takeOrderPhoto:takePickupPhoto,
+    takePickupPhoto:takePickupPhoto,
     startOrder: startOrder,
     createOrderItem: createOrderItem,
     readOrderItem: readOrderItem,
