@@ -114,7 +114,7 @@ export default function (components: Components) {
       // notify the other users
       socket.broadcast.emit("order:confirmed", payload);
     },
-    listOrders: async function (callback: (res: Response<Order[]>) => void) {
+    orderlist: async function (callback: (res: Response<Order[]>) => void) {
       try {
         callback({
           data: await orderRepository.findAll(),
