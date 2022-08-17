@@ -1,26 +1,32 @@
 {
   "name": "best-bitcube-noms-server",
   "version": "0.0.1",
-  "description": "Server ",  
+  "description": "Noms Server",
   "scripts": {
-    "start": "ts-node lib/index.ts",
+    "start": "ts-node src/main.ts",
     "build": "tsc",
     "test": "nyc mocha --require ts-node/register test/**/*.ts"
-  }, 
+  },
   "dependencies": {
+    "@google-cloud/vision": "^2.4.2",
     "joi": "^17.4.0",
     "socket.io": "^4.0.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@types/mocha": "^8.2.3",
+    "@tsconfig/node16": "^1.0.3",
     "@types/chai": "^4.2.16",
+    "@types/mocha": "^8.2.3",
+    "@types/node": "^18.7.6",
     "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
     "chai": "^4.3.4",
+    "eslint": "^8.5.0",
     "mocha": "^8.3.2",
     "nyc": "^15.1.0",
     "socket.io-client": "^4.0.1",
-    "ts-node": "10.7.0",
+    "ts-node": "^10.4.0",
     "typescript": "4.5.4"
   }
 }
