@@ -39,7 +39,6 @@ export default function (components: Components) {
       //   });
       // }
 
-
       // acknowledge the creation
       // callback(void);
 
@@ -115,7 +114,7 @@ export default function (components: Components) {
       // notify the other users
       socket.broadcast.emit("order:confirmed", payload);
     },
-    listOrders: async function (callback: (res: Response<Order[]>) => void) {
+    orderList: async function (callback: (res: Response<Order[]>) => void) {
       try {
         callback({
           data: await orderRepository.findAll(),
