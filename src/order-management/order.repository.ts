@@ -58,16 +58,11 @@ export interface OrderItem {
 }
 
 export abstract class OrderRepository extends CrudRepository<Order, NumberPlate> {}
-export abstract class OrderItemRepository extends CrudRepository<OrderItem, NumberPlate> {}
 
 export class InMemoryOrderRepository extends OrderRepository {
   private readonly orders: Map<NumberPlate, Order> = new Map();
 
-  // findAll(id:string): Promise<OrderItem[]> {
   findAll(): Promise<Order[]> {
-    // this.orders.set('FLD177FS', {id:'FLD177FS', completed:true, qty:1, size:'medium',title:'cheese burger'} as Order);
-    // this.orderItems.filter(x=>x.id == this.id);
-
     const entities = Array.from(this.orders.values());
     return Promise.resolve(entities);
   }
@@ -87,39 +82,6 @@ export class InMemoryOrderRepository extends OrderRepository {
 
   deleteById(id: NumberPlate): Promise<void> {
     const deleted = this.orders.delete(id);
-    if (deleted) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject(Errors.ENTITY_NOT_FOUND);
-    }
-  }
-}
-
-export class InMemoryOrderItemRepository extends OrderItemRepository {
-  private readonly orderItems: Map<string, OrderItem> = new Map();
-
-  findAll(): Promise<OrderItem[]> {
-    this.orderItems.set('FLD177FS', {id:'FLD177FS', completed:true, qty:1, size:'medium',title:'cheese burger'} as OrderItem);
-
-    const entities = Array.from(this.orderItems.values());
-    return Promise.resolve(entities);
-  }
-
-  findById(id: NumberPlate): Promise<OrderItem> {
-    if (this.orderItems.has(id)) {
-      return Promise.resolve(this.orderItems.get(id)!);
-    } else {
-      return Promise.reject(Errors.ENTITY_NOT_FOUND);
-    }
-  }
-
-  save(entity: OrderItem): Promise<void> {
-    this.orderItems.set(entity.id, entity);
-    return Promise.resolve();
-  }
-
-  deleteById(id: NumberPlate): Promise<void> {
-    const deleted = this.orderItems.delete(id);
     if (deleted) {
       return Promise.resolve();
     } else {

@@ -17,11 +17,6 @@ export function createApplication(
     startOrder: startOrder,
     confirmOrder: confirmOrder,
     orderList: orderList,
-    createOrderItem: createOrderItem,
-    readOrderItem: readOrderItem,
-    updateOrderItem: updateOrderItem,
-    deleteOrderItem: deleteOrderItem,
-    listOrderItem: listOrderItem,
   } = createOrderHandlers(components);
 
   io.on("connection", (socket) => {
@@ -30,11 +25,6 @@ export function createApplication(
     socket.on("order:start", startOrder);
     socket.on("order:confirm", confirmOrder);
     socket.on("order:list", orderList);
-    socket.on("order:item:create", createOrderItem);
-    socket.on("order:item:read", readOrderItem);
-    socket.on("order:item:update", updateOrderItem);
-    socket.on("order:item:delete", deleteOrderItem);
-    socket.on("order:item:list", listOrderItem);
   });
 
   return io;
