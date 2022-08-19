@@ -17,11 +17,13 @@ export function createApplication(
     startOrder: startOrder,
     confirmOrder: confirmOrder,
     orderList: orderList,
+    findOrder:findOrder
   } = createOrderHandlers(components);
 
   io.on("connection", (socket) => {
     socket.on("photo:order:take", takeOrderPhoto);
     socket.on("photo:pickup:take", takePickupPhoto);
+    socket.on("order:find", findOrder);
     socket.on("order:start", startOrder);
     socket.on("order:confirm", confirmOrder);
     socket.on("order:list", orderList);

@@ -103,11 +103,31 @@ export default function (components: Components) {
         callback({
           data: await orderRepository.findAll(),
         });
+
       } catch (e) {
         callback({
           error: sanitizeErrorMessage(e),
         });
       }
+    },
+    findOrder: async function (
+      numberPlate: string,
+      callback: (res: Response<Order>) => void
+    ) {
+      // @ts-ignore
+      const socket: Socket<ClientEvents, ServerEvents> = this;
+      try {
+      let foundOrder:Order= await orderRepository.findById(numberPlate)
+        callback({
+          data: foundOrder
+        });
+      socket.broadcast.emit("order:found", foundOrder);
+    } catch (e) {
+        callback({
+          error: sanitizeErrorMessage(e),
+        });
+      }
+    
     },
     deleteOrder: async function (
       id: NumberPlate,
